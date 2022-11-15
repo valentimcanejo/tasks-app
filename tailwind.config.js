@@ -16,15 +16,15 @@ module.exports = {
       {
         light: {
           ...require("daisyui/src/colors/themes")["[data-theme=light]"],
-          primary: "#5b21b6",
-          "primary-focus": "#4c1d95",
-          secondary: "#5b21b6",
+          primary: "#47294c",
+          //"primary-focus": "#47294c",
+          secondary: "#47294c",
           "secondary-content": "#ffffff",
           accent: "#36d399",
         },
         dark: {
           ...require("daisyui/src/colors/themes")["[data-theme=dark]"],
-          primary: "#e96d7b",
+          primary: "#da84b1",
           secondary: "#242933",
           "secondary-content": "#ffffff",
           accent: "#36d399",

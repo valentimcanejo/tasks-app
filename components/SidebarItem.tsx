@@ -20,7 +20,7 @@ export default function SidebarItem({
     <>
       <Link href={{ pathname: url }} className="no-underline">
         <li
-          className={`flex rounded-md p-2 mt-5 cursor-pointer hover:bg-light-white text-gray-300 text-xl items-center gap-x-4`}
+          className={`flex rounded-md p-2 mt-5 cursor-pointer hover:bg-light-white text-gray-300 text-lg items-center gap-x-4`}
         >
           <div>{icone}</div>
           <span
