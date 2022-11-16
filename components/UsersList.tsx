@@ -61,7 +61,7 @@ export default function UsersList({
             leaveTo="opacity-0"
             afterLeave={() => setQuery("")}
           >
-            <Combobox.Options className="  mt-1 max-h-60 w-full box-border overflow-auto rounded-md bg-base-300 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="mt-1 max-h-60 px-8 w-full box-border overflow-auto rounded-md bg-base-300 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {usersFiltrados?.length === 0 && query !== "" ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                   Usuário não encontrado
@@ -71,24 +71,17 @@ export default function UsersList({
                   <Combobox.Option
                     key={user.id}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10  pr-4 ${
+                      `relative cursor-default select-none py-2 px-2 rounded-lg list-none  ${
                         active ? "bg-primary text-white" : "text-base-content"
                       }`
                     }
                     value={user}
                   >
                     {({ selected, active }) => (
-                      <>
-                        <span
-                          className={`block truncate ${
-                            selected ? "font-medium" : "font-normal"
-                          }`}
-                        >
-                          {user.name}
-                        </span>
+                      <div>
                         {selected ? (
                           <span
-                            className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                            className={`absolute flex -left-8 items-center ${
                               active ? "text-white" : "text-teal-600"
                             }`}
                           >
@@ -108,7 +101,14 @@ export default function UsersList({
                             </svg>
                           </span>
                         ) : null}
-                      </>
+                        <span
+                          className={`block truncate ${
+                            selected ? "font-medium" : "font-normal"
+                          }`}
+                        >
+                          {user.name}
+                        </span>
+                      </div>
                     )}
                   </Combobox.Option>
                 ))

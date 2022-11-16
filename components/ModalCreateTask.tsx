@@ -1,8 +1,10 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 import { ref, uploadString } from "firebase/storage";
 import { useRouter } from "next/router";
 import { Fragment, useContext, useState } from "react";
+import db from "../firebase/initFirebase";
+import TypesSelect from "./TypesSelect";
 import UsersList from "./UsersList";
 
 interface ModalProps {
@@ -41,21 +43,39 @@ const users = [
   },
 ];
 
+const types = ["Nova", "Erro", "Curso"];
+
 export default function ModalCriarPedido({
   open = false,
   onClose,
 }: ModalProps) {
-  const [identificador, setIdentificador] = useState("");
-  const [selected, setSelected] = useState(users && users[0]?.id);
+  const [taskType, setTaskType] = useState<string>(types[0]);
+  const [taskDescription, setTaskDescription] = useState<string>("");
+  const [taskUser, setTaskUser] = useState<{ id: number; name: string }>();
 
-  const clearFields = () => {
-    setIdentificador("");
+  const postTask = async (e: any) => {
+    e.preventDefault();
+    try {
+      const data = {
+        type: taskType,
+        description: taskDescription,
+        dev: taskUser?.name,
+      };
+
+      await fetch(`/api/task/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+    } catch (error) {}
   };
 
   return (
     <>
       <Transition appear show={open} as={Fragment}>
-        <Dialog as="div" className="relative z-50" onClose={onClose}>
+        <Dialog as="div" className="relative  z-50" onClose={onClose}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -68,7 +88,7 @@ export default function ModalCriarPedido({
             <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
 
-          <div className="fixed inset-0 overflow-y-auto">
+          <div className="fixed inset-0  ">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
               <Transition.Child
                 as={Fragment}
@@ -86,8 +106,21 @@ export default function ModalCriarPedido({
                   >
                     Crie uma nova tarefa
                   </Dialog.Title>
-                  <form>
+                  <form onSubmit={postTask}>
                     <div className="form-control flex flex-col gap-4">
+                      <div className="flex gap-1 flex-col">
+                        <label className="label flex justify-between">
+                          <span className="label-text  text-lg box-border">
+                            Tipo da tarefa:
+                          </span>
+                        </label>
+                        <TypesSelect
+                          selected={taskType}
+                          setSelected={setTaskType}
+                          types={types}
+                        />
+                      </div>
+
                       <div className="flex gap-1 flex-col">
                         <label className="label flex justify-between">
                           <span className="label-text  text-lg box-border">
@@ -96,8 +129,8 @@ export default function ModalCriarPedido({
                         </label>
                         <input
                           required
-                          value={identificador}
-                          onChange={(e) => setIdentificador(e.target.value)}
+                          value={taskDescription}
+                          onChange={(e) => setTaskDescription(e.target.value)}
                           type="text"
                           placeholder="Digite a descrição da tarefa..."
                           className="input input-bordered box-border w-full placeholder-gray-500 placeholder-opacity-70"
@@ -110,8 +143,8 @@ export default function ModalCriarPedido({
                           </span>
                         </label>
                         <UsersList
-                          selected={selected}
-                          setSelected={setSelected}
+                          selected={taskUser}
+                          setSelected={setTaskUser}
                           users={users}
                         />
                       </div>

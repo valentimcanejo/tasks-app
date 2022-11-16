@@ -9,15 +9,10 @@ interface ResponseError {
   message: string;
 }
 
-interface Dev {
-  id: string;
-  name: string;
-}
-
 interface Task {
   description: string;
   type: string;
-  dev: Dev;
+  dev: string;
   status: string;
   date: Date;
 }

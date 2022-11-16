@@ -6,12 +6,15 @@ import Header from "../../components/Header";
 import { AddIcon } from "../../components/icons";
 import ModalCreateTask from "../../components/ModalCreateTask";
 import TaskTable from "../../components/TaskTable";
+import useWindowSize from "../../hooks/useWindowSize";
 import { getTasks } from "../../service/tasks";
 
 export default function Tasks() {
   const [openModalCreateTask, setOpenModalCreateTask] = useState(false);
   const [tasksArray, setTasksArray] = useState<DocumentData[]>();
   const [sortedTasksArray, setSortedTasksArray] = useState<DocumentData[]>();
+
+  const windowWidth = useWindowSize();
 
   const getAllTasks = async () => {
     getTasks(setTasksArray);
@@ -23,7 +26,7 @@ export default function Tasks() {
 
   useEffect(() => {
     const sortByDevName = tasksArray?.sort((a, b) =>
-      a.dev.name > b.dev.name ? 1 : b.dev.name > a.dev.name ? -1 : 0
+      a.dev > b.dev ? 1 : b.dev > a.dev ? -1 : 0
     );
     setSortedTasksArray(sortByDevName);
   }, [tasksArray]);
@@ -41,8 +44,15 @@ export default function Tasks() {
             {AddIcon}
           </div>
         </div>
-        <div className="overflow-x-auto">
-          <TaskTable tasksArray={sortedTasksArray} />
+
+        <div
+          className={`card ${
+            windowWidth && windowWidth <= 640 ? "overflow-x-auto" : ""
+          } bg-base-100 shadow-xl`}
+        >
+          <div className="card-body p-0">
+            <TaskTable tasksArray={sortedTasksArray} />
+          </div>
         </div>
       </div>
       <ModalCreateTask
