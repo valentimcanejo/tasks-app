@@ -1,28 +1,40 @@
 import { Menu, Transition } from "@headlessui/react";
+import { doc, DocumentData, updateDoc } from "firebase/firestore";
 import { Fragment, SVGProps, useEffect, useRef, useState } from "react";
+import db from "../firebase/initFirebase";
 
 interface DropdownStatusProps {
-  status: string;
+  task: DocumentData;
 }
 
-export default function DropdownStatus({ status }: DropdownStatusProps) {
+const arrayStatus: string[] = ["A Fazer", "Fazendo", "Em Teste", "Concluído"];
+
+export default function DropdownStatus({ task }: DropdownStatusProps) {
+  const updateTaskStatus = async (newStatus: string) => {
+    const taskCollectionRef = doc(db, "tasks", task.id);
+
+    await updateDoc(taskCollectionRef, {
+      status: newStatus,
+    });
+  };
+
   return (
     <div>
-      <Menu as="div" className="inline-block text-left">
+      <Menu as="div" className="inline-block text-left ">
         <Menu.Button
           className={`border-none text-center cursor-pointer text-white ${
-            status === "A Fazer"
+            task?.status === "A Fazer"
               ? "bg-red-400"
-              : status === "Concluído"
+              : task?.status === "Concluído"
               ? "bg-blue-400"
-              : status === "Em Teste"
+              : task?.status === "Em Teste"
               ? "bg-green-400"
-              : status === "Fazendo"
+              : task?.status === "Fazendo"
               ? "bg-orange-400"
               : null
           }`}
         >
-          {status}
+          {task?.status}
         </Menu.Button>
 
         <Transition
@@ -34,122 +46,26 @@ export default function DropdownStatus({ status }: DropdownStatusProps) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="px-1 py-1 ">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`${
-                      active ? "bg-violet-500 text-white" : "text-gray-900"
-                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                  >
-                    {active ? (
-                      <EditActiveIcon
-                        className="mr-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <EditInactiveIcon
-                        className="mr-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
+          <Menu.Items className="absolute border-none bg-white right-0 mt-2 w-56 origin-top-right divide-y rounded-lg shadow-lg ring-1 ring-opacity-5 focus:outline-none">
+            <div className="px-1 py-1 border-none bg-base-100 rounded-lg ">
+              {arrayStatus.map((status: string) => (
+                <div key={status}>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        onClick={() => updateTaskStatus(status)}
+                        className={`${
+                          active
+                            ? "bg-primary text-white"
+                            : "text-base-content bg-base-100"
+                        } group flex border-none w-full items-center rounded-md px-2 py-2 text-sm`}
+                      >
+                        {status}
+                      </button>
                     )}
-                    Edit
-                  </button>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`${
-                      active ? "bg-violet-500 text-white" : "text-gray-900"
-                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                  >
-                    {active ? (
-                      <DuplicateActiveIcon
-                        className="mr-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <DuplicateInactiveIcon
-                        className="mr-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    )}
-                    Duplicate
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-            <div className="px-1 py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`${
-                      active ? "bg-violet-500 text-white" : "text-gray-900"
-                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                  >
-                    {active ? (
-                      <ArchiveActiveIcon
-                        className="mr-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <ArchiveInactiveIcon
-                        className="mr-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    )}
-                    Archive
-                  </button>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`${
-                      active ? "bg-violet-500 text-white" : "text-gray-900"
-                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                  >
-                    {active ? (
-                      <MoveActiveIcon
-                        className="mr-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <MoveInactiveIcon
-                        className="mr-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    )}
-                    Move
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-            <div className="px-1 py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`${
-                      active ? "bg-violet-500 text-white" : "text-gray-900"
-                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                  >
-                    {active ? (
-                      <DeleteActiveIcon
-                        className="mr-2 h-5 w-5 text-violet-400"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <DeleteInactiveIcon
-                        className="mr-2 h-5 w-5 text-violet-400"
-                        aria-hidden="true"
-                      />
-                    )}
-                    Delete
-                  </button>
-                )}
-              </Menu.Item>
+                  </Menu.Item>
+                </div>
+              ))}
             </div>
           </Menu.Items>
         </Transition>

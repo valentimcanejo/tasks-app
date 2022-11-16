@@ -33,9 +33,9 @@ export default function Tasks() {
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col  mx-2">
         <Header titulo="Tasks" />
-        <div className="flex px-4 justify-between mt-6">
+        <div className="flex justify-between mt-6">
           <div className="text text-lg">Lista de Tarefas:</div>
           <div
             onClick={() => setOpenModalCreateTask(true)}

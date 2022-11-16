@@ -12,7 +12,7 @@ export default function Header({ titulo }: HeaderProps) {
   }, []);
 
   return (
-    <div className="flex justify-between px-4">
+    <div className="flex justify-between mx-2">
       <p className="text-2xl sm:text-xl md:text-xl lg:text-2xl font-bold leading-normal text-base-content">
         {titulo}
       </p>

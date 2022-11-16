@@ -6,7 +6,6 @@ interface TasksInterface {
   tasksArray?: DocumentData[];
 }
 
-const arrayStatus: string[] = ["A Fazer", "Fazendo", "Em Teste", "Concluído"];
 const arrayDevs: string[] = [
   "Rômulo",
   "Eric",
@@ -17,6 +16,8 @@ const arrayDevs: string[] = [
   "Pedro",
 ];
 const arrayTypes: string[] = ["Nova", "Erro", "Curso"];
+
+const arrayStatus: string[] = ["A Fazer", "Fazendo", "Em Teste", "Concluído"];
 
 export default function TasksTableBody({ tasksArray }: TasksInterface) {
   const updateTaskType = async (task: DocumentData, newType: string) => {
@@ -44,7 +45,7 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
   };
 
   return (
-    <tbody>
+    <tbody className="rounded-b-lg">
       {tasksArray?.map((task) => (
         <tr key={task?.id} className="rounded-b-lg">
           <td
@@ -64,7 +65,7 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
               </label>
               <ul
                 tabIndex={0}
-                className="dropdown-content menu cursor-pointer p-2 shadow bg-base-300 rounded-box w-52"
+                className="dropdown-content absolute menu cursor-pointer p-2 shadow bg-base-300 rounded-box w-52"
               >
                 {arrayTypes.map((type: string) => (
                   <li key={type} onClick={() => updateTaskType(task, type)}>
@@ -75,13 +76,13 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
             </div>
           </td>
           <td className="w-1/6">
-            <div className="dropdown">
+            <div className="dropdown ">
               <label className="cursor-pointer" tabIndex={0}>
                 {task?.dev}
               </label>
               <ul
                 tabIndex={0}
-                className="dropdown-content menu cursor-pointer p-2 shadow bg-base-300 rounded-box w-52"
+                className="dropdown-content absolute menu cursor-pointer p-2 shadow bg-base-300 rounded-box w-52"
               >
                 {arrayDevs.map((dev: string) => (
                   <li key={dev} onClick={() => updateTaskDev(task, dev)}>
@@ -105,7 +106,8 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
                 : null
             }`}
           >
-            <div className="dropdown dropdown-end">
+            <DropdownStatus task={task} />
+            {/* <div className="dropdown dropdown-end">
               <label className="cursor-pointer" tabIndex={0}>
                 {task?.status}
               </label>
@@ -122,7 +124,7 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
           </td>
         </tr>
       ))}

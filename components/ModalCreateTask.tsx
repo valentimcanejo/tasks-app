@@ -69,6 +69,8 @@ export default function ModalCriarPedido({
         },
         body: JSON.stringify(data),
       });
+
+      onClose(false);
     } catch (error) {}
   };
 
