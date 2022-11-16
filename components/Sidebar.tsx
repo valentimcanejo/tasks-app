@@ -104,7 +104,7 @@ export default function Sidebar({ children }: ConteudoPros) {
           >
             {LeftArrow}
           </div>
-          <Link href={{ pathname: "/" }} className="no-underline">
+          <Link href={{ pathname: "/tasks" }} className="no-underline">
             <div className="flex gap-x-4 ml-2 text-white items-center">
               <div
                 className={`cursor-pointer duration-500 ${
@@ -133,7 +133,7 @@ export default function Sidebar({ children }: ConteudoPros) {
 
             <SidebarItem
               texto="Desenvolvedores"
-              url="/devs"
+              url="/tasks"
               icone={UsuarioIcon}
               open={open}
             />

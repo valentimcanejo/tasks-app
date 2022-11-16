@@ -53,6 +53,11 @@ export default function ModalCriarPedido({
   const [taskDescription, setTaskDescription] = useState<string>("");
   const [taskUser, setTaskUser] = useState<{ id: number; name: string }>();
 
+  const clearFields = () => {
+    setTaskDescription("");
+    setTaskUser({ id: 0, name: "" });
+  };
+
   const postTask = async (e: any) => {
     e.preventDefault();
     try {
@@ -71,6 +76,7 @@ export default function ModalCriarPedido({
       });
 
       onClose(false);
+      clearFields();
     } catch (error) {}
   };
 

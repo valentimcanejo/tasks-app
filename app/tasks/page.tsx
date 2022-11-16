@@ -33,25 +33,27 @@ export default function Tasks() {
 
   return (
     <>
-      <div className="flex flex-col  mx-2">
+      <div className="flex flex-col ">
         <Header titulo="Tasks" />
-        <div className="flex justify-between mt-6">
-          <div className="text text-lg">Lista de Tarefas:</div>
-          <div
-            onClick={() => setOpenModalCreateTask(true)}
-            className="cursor-pointer"
-          >
-            {AddIcon}
+        <div className="mx-4">
+          <div className="flex justify-between mt-6">
+            <div className="text text-lg">Lista de Tarefas:</div>
+            <div
+              onClick={() => setOpenModalCreateTask(true)}
+              className="cursor-pointer"
+            >
+              {AddIcon}
+            </div>
           </div>
-        </div>
 
-        <div
-          className={`card ${
-            windowWidth && windowWidth <= 640 ? "overflow-x-auto" : ""
-          } bg-base-100 shadow-xl`}
-        >
-          <div className="card-body p-0">
-            <TaskTable tasksArray={sortedTasksArray} />
+          <div
+            className={`card ${
+              windowWidth && windowWidth <= 640 ? "overflow-x-auto" : ""
+            } bg-base-100 shadow-xl`}
+          >
+            <div className="card-body p-0">
+              <TaskTable tasksArray={sortedTasksArray} />
+            </div>
           </div>
         </div>
       </div>

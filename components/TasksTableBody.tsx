@@ -1,49 +1,16 @@
 import { collection, doc, DocumentData, updateDoc } from "firebase/firestore";
 import db from "../firebase/initFirebase";
+import DropdownDevs from "./DropdownDevs";
 import DropdownStatus from "./DropdownStatus";
+import DropdownType from "./DropdownType";
 
 interface TasksInterface {
   tasksArray?: DocumentData[];
 }
 
-const arrayDevs: string[] = [
-  "Rômulo",
-  "Eric",
-  "Gabriel Óliver",
-  "Gabriel Silva",
-  "Jardel",
-  "Edjan",
-  "Pedro",
-];
 const arrayTypes: string[] = ["Nova", "Erro", "Curso"];
 
-const arrayStatus: string[] = ["A Fazer", "Fazendo", "Em Teste", "Concluído"];
-
 export default function TasksTableBody({ tasksArray }: TasksInterface) {
-  const updateTaskType = async (task: DocumentData, newType: string) => {
-    const taskCollectionRef = doc(db, "tasks", task.id);
-
-    await updateDoc(taskCollectionRef, {
-      type: newType,
-    });
-  };
-
-  const updateTaskDev = async (task: DocumentData, newDev: string) => {
-    const taskCollectionRef = doc(db, "tasks", task.id);
-
-    await updateDoc(taskCollectionRef, {
-      dev: newDev,
-    });
-  };
-
-  const updateTaskStatus = async (task: DocumentData, newStatus: string) => {
-    const taskCollectionRef = doc(db, "tasks", task.id);
-
-    await updateDoc(taskCollectionRef, {
-      status: newStatus,
-    });
-  };
-
   return (
     <tbody className="rounded-b-lg">
       {tasksArray?.map((task) => (
@@ -59,7 +26,8 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
                 : null
             }`}
           >
-            <div className="dropdown">
+            <DropdownType task={task} />
+            {/* <div className="dropdown">
               <label className="cursor-pointer" tabIndex={0}>
                 {task?.type}
               </label>
@@ -73,10 +41,11 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
           </td>
           <td className="w-1/6">
-            <div className="dropdown ">
+            <DropdownDevs task={task} />
+            {/* <div className="dropdown ">
               <label className="cursor-pointer" tabIndex={0}>
                 {task?.dev}
               </label>
@@ -90,7 +59,7 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
           </td>
           <td className="text-sm">{task?.description}</td>
           <td
