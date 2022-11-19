@@ -1,16 +1,19 @@
-import { collection, doc, DocumentData, updateDoc } from "firebase/firestore";
-import db from "../firebase/initFirebase";
+import { DocumentData } from "firebase/firestore";
+import { useState } from "react";
+
 import DropdownDevs from "./DropdownDevs";
 import DropdownStatus from "./DropdownStatus";
 import DropdownType from "./DropdownType";
+import ModalEditDescription from "./ModalEditDescription";
 
 interface TasksInterface {
   tasksArray?: DocumentData[];
 }
 
-const arrayTypes: string[] = ["Nova", "Erro", "Curso"];
-
 export default function TasksTableBody({ tasksArray }: TasksInterface) {
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<DocumentData | undefined>();
+
   return (
     <tbody className="rounded-b-lg">
       {tasksArray?.map((task) => (
@@ -27,41 +30,34 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
             }`}
           >
             <DropdownType task={task} />
-            {/* <div className="dropdown">
-              <label className="cursor-pointer" tabIndex={0}>
-                {task?.type}
-              </label>
-              <ul
-                tabIndex={0}
-                className="dropdown-content absolute menu cursor-pointer p-2 shadow bg-base-300 rounded-box w-52"
-              >
-                {arrayTypes.map((type: string) => (
-                  <li key={type} onClick={() => updateTaskType(task, type)}>
-                    <a>{type}</a>
-                  </li>
-                ))}
-              </ul>
-            </div> */}
           </td>
           <td className="w-1/6">
             <DropdownDevs task={task} />
-            {/* <div className="dropdown ">
-              <label className="cursor-pointer" tabIndex={0}>
-                {task?.dev}
-              </label>
-              <ul
-                tabIndex={0}
-                className="dropdown-content absolute menu cursor-pointer p-2 shadow bg-base-300 rounded-box w-52"
-              >
-                {arrayDevs.map((dev: string) => (
-                  <li key={dev} onClick={() => updateTaskDev(task, dev)}>
-                    <a>{dev}</a>
-                  </li>
-                ))}
-              </ul>
-            </div> */}
           </td>
-          <td className="text-sm">{task?.description}</td>
+          <td className="text-sm flex justify-between">
+            <div>{task?.description}</div>{" "}
+            <div
+              className="text-primary cursor-pointer"
+              onClick={() => {
+                setOpenModalEdit(true), setSelectedTask(task);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                />
+              </svg>
+            </div>
+          </td>
           <td
             className={`w-1/12 text-center  text-white ${
               task?.status === "A Fazer"
@@ -76,27 +72,18 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
             }`}
           >
             <DropdownStatus task={task} />
-            {/* <div className="dropdown dropdown-end">
-              <label className="cursor-pointer" tabIndex={0}>
-                {task?.status}
-              </label>
-              <ul
-                tabIndex={0}
-                className="dropdown-content menu cursor-pointer p-2 shadow bg-base-300 rounded-box w-52"
-              >
-                {arrayStatus.map((status: string) => (
-                  <li
-                    key={status}
-                    onClick={() => updateTaskStatus(task, status)}
-                  >
-                    <a>{status}</a>
-                  </li>
-                ))}
-              </ul>
-            </div> */}
           </td>
         </tr>
       ))}
+      <tr>
+        <td>
+          <ModalEditDescription
+            open={openModalEdit}
+            onClose={setOpenModalEdit}
+            task={selectedTask}
+          />
+        </td>
+      </tr>
     </tbody>
   );
 }
