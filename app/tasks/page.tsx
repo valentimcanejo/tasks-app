@@ -1,11 +1,12 @@
 "use client";
 
-import { DocumentData } from "firebase/firestore";
+import { addDoc, collection, DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { AddIcon } from "../../components/icons";
 import ModalCreateTask from "../../components/ModalCreateTask";
 import TaskTable from "../../components/TaskTable";
+import db from "../../firebase/initFirebase";
 import useWindowSize from "../../hooks/useWindowSize";
 import { getTasks } from "../../service/tasks";
 
@@ -15,6 +16,20 @@ export default function Tasks() {
   const [sortedTasksArray, setSortedTasksArray] = useState<DocumentData[]>();
 
   const windowWidth = useWindowSize();
+
+  const addTask = async () => {
+    const collectionRef = collection(db, "tasks");
+
+    const data = {
+      date: new Date(),
+      description: "",
+      dev: "Selecionar",
+      status: "A Fazer",
+      type: "Nova",
+    };
+
+    await addDoc(collectionRef, data);
+  };
 
   const getAllTasks = async () => {
     getTasks(setTasksArray);
@@ -39,7 +54,8 @@ export default function Tasks() {
           <div className="flex justify-between mt-6">
             <div className="text text-lg">Lista de Tarefas:</div>
             <div
-              onClick={() => setOpenModalCreateTask(true)}
+              onClick={addTask}
+              //onClick={() => setOpenModalCreateTask(true)}
               className="cursor-pointer"
             >
               {AddIcon}
