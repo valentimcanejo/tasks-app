@@ -1,6 +1,11 @@
 "use client";
 
-import { addDoc, collection, doc, DocumentData } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  CollectionReference,
+  DocumentData,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { AddIcon } from "../../components/icons";
@@ -12,22 +17,26 @@ import useWindowSize from "../../hooks/useWindowSize";
 import { getSprintByID, getSprints } from "../../service/sprints";
 import { getTasks } from "../../service/tasks";
 import Sidebar from "../../components/Sidebar";
+import { TaskData } from "../../model/TaskData";
+import { SprintData } from "../../model/SprintData";
 
 export default function Tasks() {
-  const [openModalCreateTask, setOpenModalCreateTask] = useState(false);
-  const [tasksArray, setTasksArray] = useState<DocumentData[]>();
-  const [sortedTasksArray, setSortedTasksArray] = useState<DocumentData[]>();
+  const [tasksArray, setTasksArray] = useState<TaskData[]>();
+  const [sortedTasksArray, setSortedTasksArray] = useState<TaskData[]>();
   const [selected, setSelected] = useState<any>(() => {
     if (typeof window !== "undefined") {
       localStorage.getItem("printAtual");
     }
   });
-  const [arraySprints, setArraySprints] = useState<DocumentData[]>();
-  const [arraySprintTasks, setArraySprintTasks] = useState<any>();
+  const [arraySprints, setArraySprints] = useState<SprintData[]>();
+  const [arraySprintTasks, setArraySprintTasks] = useState<TaskData[]>();
   const windowWidth = useWindowSize();
 
   const addTask = async () => {
-    const collectionRef = collection(db, "tasks");
+    const collectionRef: CollectionReference<DocumentData> = collection(
+      db,
+      "tasks"
+    );
 
     const data = {
       date: new Date(),
@@ -51,13 +60,13 @@ export default function Tasks() {
   };
 
   const getTasksByIds = async () => {
-    let array: any = [];
+    let array: TaskData[] = [];
 
     sortedTasksArray?.map(
-      (task) => selected?.tasks?.includes(task.id) && array.push(task)
+      (task: TaskData) => selected?.tasks?.includes(task.id) && array.push(task)
     );
 
-    const sprintTasksWithoutUndefined = array?.filter((element: any) => {
+    const sprintTasksWithoutUndefined = array?.filter((element: TaskData) => {
       return element !== undefined;
     });
 
@@ -66,7 +75,7 @@ export default function Tasks() {
 
   const getSprint = async () => {
     if (typeof window !== "undefined") {
-      const id = localStorage.getItem("printAtual");
+      const id: string | null = localStorage.getItem("printAtual");
       if (id) {
         getSprintByID(id, setSelected);
       } else {
@@ -83,10 +92,6 @@ export default function Tasks() {
     getTasksByIds();
   }, [sortedTasksArray, selected]);
 
-  // useEffect(() => {
-  //   localStorage.setItem("printAtual", selected.name);
-  // }, []);
-
   useEffect(() => {
     getAllSprints();
   }, []);
@@ -96,8 +101,8 @@ export default function Tasks() {
   }, []);
 
   useEffect(() => {
-    const sortByDevName = tasksArray?.sort((a, b) =>
-      a.dev > b.dev ? 1 : b.dev > a.dev ? -1 : 0
+    const sortByDevName: TaskData[] | undefined = tasksArray?.sort(
+      (a: TaskData, b: TaskData) => (a.dev > b.dev ? 1 : b.dev > a.dev ? -1 : 0)
     );
     setSortedTasksArray(sortByDevName);
   }, [tasksArray]);

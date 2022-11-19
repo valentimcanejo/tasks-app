@@ -1,11 +1,25 @@
-import { DocumentData, collection, onSnapshot } from "firebase/firestore";
+import {
+  DocumentData,
+  collection,
+  onSnapshot,
+  CollectionReference,
+} from "firebase/firestore";
 import db from "../../firebase/initFirebase";
+import { SprintData } from "../../model/SprintData";
 
-export const getSprints = (setData: (value: DocumentData[]) => void) => {
-  const tasksCollectionRef = collection(db, "sprints");
+export const getSprints = (setData: (value: SprintData[]) => void) => {
+  const sprintsCollectionRef: CollectionReference<DocumentData> = collection(
+    db,
+    "sprints"
+  );
 
-  onSnapshot(tasksCollectionRef, (snapshot) => {
-    setData(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  onSnapshot(sprintsCollectionRef, (snapshot) => {
+    setData(
+      snapshot.docs.map((doc) => ({
+        ...(doc.data() as SprintData),
+        id: doc.id,
+      }))
+    );
   });
 
   return;
@@ -13,12 +27,15 @@ export const getSprints = (setData: (value: DocumentData[]) => void) => {
 
 export const getSprintByID = (
   id: string,
-  setData: (value: DocumentData | undefined) => void
+  setData: (value: SprintData | undefined) => void
 ) => {
-  const collectionRef = collection(db, "sprints");
-  onSnapshot(collectionRef, (snapshot) => {
+  const sprintsCollectionRef: CollectionReference<DocumentData> = collection(
+    db,
+    "sprints"
+  );
+  onSnapshot(sprintsCollectionRef, (snapshot) => {
     const docs = snapshot.docs.map((doc) => {
-      const data = doc.data();
+      const data = doc.data() as SprintData;
       data.id = doc.id;
       return data;
     });
@@ -27,18 +44,3 @@ export const getSprintByID = (
     setData(find);
   });
 };
-
-// export const getByID = async ( id: string) => {
-//   const collectionRef = collection(db, "sprints");
-
-//   const snapshots = await getDocs(collectionRef);
-
-//   const docs = snapshots.docs.map(doc => {
-//     const data = doc.data();
-//     data.id = doc.id;
-
-//     return data;
-//   });
-
-//   return docs.find(elemento => elemento.id === id);
-// };

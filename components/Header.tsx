@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { themeChange } from "theme-change";
 interface HeaderProps {
   titulo: string;

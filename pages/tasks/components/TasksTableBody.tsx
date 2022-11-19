@@ -1,23 +1,32 @@
-import { deleteDoc, doc, DocumentData } from "firebase/firestore";
+import {
+  deleteDoc,
+  doc,
+  DocumentData,
+  DocumentReference,
+} from "firebase/firestore";
 import { useState } from "react";
 import db from "../../../firebase/initFirebase";
-
+import { TaskData } from "../../../model/TaskData";
 import DropdownDevs from "./DropdownDevs";
 import DropdownStatus from "./DropdownStatus";
 import DropdownType from "./DropdownType";
 import ModalEditDescription from "./ModalEditDescription";
 
 interface TasksInterface {
-  tasksArray?: DocumentData[];
+  tasksArray?: TaskData[];
 }
 
 export default function TasksTableBody({ tasksArray }: TasksInterface) {
-  const [openModalEdit, setOpenModalEdit] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<DocumentData | undefined>();
+  const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
+  const [selectedTask, setSelectedTask] = useState<TaskData>();
 
   const deleteTask = async (task: DocumentData) => {
     if (task) {
-      const collectionRef = doc(db, "tasks", task.id);
+      const collectionRef: DocumentReference<DocumentData> = doc(
+        db,
+        "tasks",
+        task.id
+      );
 
       await deleteDoc(collectionRef);
     }
@@ -25,7 +34,7 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
 
   return (
     <tbody className="rounded-b-lg">
-      {tasksArray?.map((task) => (
+      {tasksArray?.map((task: TaskData) => (
         <tr key={task?.id} className="rounded-b-lg">
           <td
             className={`w-1/12 ${

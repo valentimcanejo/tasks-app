@@ -1,23 +1,14 @@
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  addDoc,
-  collection,
-  doc,
-  DocumentData,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
-import { ref, uploadString } from "firebase/storage";
-import { useRouter } from "next/router";
-import { Fragment, useContext, useEffect, useState } from "react";
+import { doc, updateDoc } from "firebase/firestore";
+
+import { Fragment, useEffect, useState } from "react";
 import db from "../../../firebase/initFirebase";
-import TypesSelect from "./TypesSelect";
-import UsersList from "./UsersList";
+import { TaskData } from "../../../model/TaskData";
 
 interface ModalProps {
   open: boolean;
   onClose: (close: boolean) => void;
-  task: DocumentData | undefined;
+  task: TaskData | undefined;
 }
 
 export default function ModalEditDescription({
@@ -25,7 +16,8 @@ export default function ModalEditDescription({
   onClose,
   task,
 }: ModalProps) {
-  const [taskDescription, setTaskDescription] = useState<string>("");
+  const [taskDescription, setTaskDescription] =
+    useState<string | undefined>("");
 
   const putTask = async (e: any) => {
     e.preventDefault();

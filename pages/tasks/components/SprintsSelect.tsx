@@ -1,11 +1,12 @@
-import { Dispatch, Fragment, SetStateAction, useState } from "react";
+import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { SprintData } from "../../../model/SprintData";
 
 interface TypesSelectProps {
-  selected: { id: string; name: string };
-  setSelected: any;
-  sprints: any;
+  selected: SprintData;
+  setSelected: (value: SprintData) => void;
+  sprints: SprintData[] | undefined;
 }
 
 export default function SprintsSelect({
@@ -33,7 +34,7 @@ export default function SprintsSelect({
             leaveTo="opacity-0"
           >
             <Listbox.Options className=" mt-1 max-h-60 px-4 box-border w-full overflow-auto rounded-md bg-base-300 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {sprints?.map((sprint: any) => (
+              {sprints?.map((sprint: SprintData) => (
                 <Listbox.Option
                   onClick={() => {
                     if (typeof window !== "undefined") {

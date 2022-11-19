@@ -1,9 +1,9 @@
-import { DocumentData } from "firebase/firestore";
+import { TaskData } from "../../../model/TaskData";
 import TasksTableBody from "./TasksTableBody";
 import TasksTableHead from "./TaskTableHead";
 
 interface TasksInterface {
-  tasksArray?: DocumentData[];
+  tasksArray?: TaskData[];
 }
 
 export default function TaskTable({ tasksArray }: TasksInterface) {

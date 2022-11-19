@@ -1,10 +1,16 @@
 import { Menu, Transition } from "@headlessui/react";
-import { doc, DocumentData, updateDoc } from "firebase/firestore";
-import { Fragment, SVGProps, useEffect, useRef, useState } from "react";
+import {
+  doc,
+  DocumentData,
+  DocumentReference,
+  updateDoc,
+} from "firebase/firestore";
+import { Fragment, SVGProps } from "react";
 import db from "../../../firebase/initFirebase";
+import { TaskData } from "../../../model/TaskData";
 
 interface DropdownDevsProps {
-  task: DocumentData;
+  task: TaskData;
 }
 
 const arrayDevs: string[] = [
@@ -19,7 +25,11 @@ const arrayDevs: string[] = [
 
 export default function DropdownDevs({ task }: DropdownDevsProps) {
   const updateTaskDev = async (newDev: string) => {
-    const taskCollectionRef = doc(db, "tasks", task.id);
+    const taskCollectionRef: DocumentReference<DocumentData> = doc(
+      db,
+      "tasks",
+      task.id
+    );
 
     await updateDoc(taskCollectionRef, {
       dev: newDev,

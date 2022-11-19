@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { getDocs, collection, addDoc, onSnapshot } from "firebase/firestore";
-import db, { storage } from "../../firebase/initFirebase";
+import { collection, addDoc } from "firebase/firestore";
+import db from "../../firebase/initFirebase";
 import nextConnect from "next-connect";
-import { ref, StorageReference, uploadString } from "firebase/storage";
 
 interface ResponseError {
   message: string;

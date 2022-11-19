@@ -1,12 +1,10 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 
-import { DocumentData } from "firebase/firestore";
-
 interface AutocompleteProps {
-  users?: any;
-  selected?: any;
-  setSelected?: any;
+  users?: string[];
+  selected?: string;
+  setSelected?: (value: string) => void;
 }
 
 export default function UsersList({
@@ -16,7 +14,7 @@ export default function UsersList({
 }: AutocompleteProps) {
   const [query, setQuery] = useState("");
 
-  const usersFiltrados =
+  const usersFiltrados: string[] | undefined =
     query === ""
       ? users
       : users?.filter((user: any) =>
@@ -27,7 +25,7 @@ export default function UsersList({
         );
 
   return (
-    <div className="">
+    <div>
       <Combobox value={selected} onChange={setSelected}>
         <div className="relative mt-1 ">
           <div className="relative w-full  cursor-default overflow-hidden rounded-lg box-border text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-primary sm:text-sm">

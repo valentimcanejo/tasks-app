@@ -1,10 +1,11 @@
 import { Menu, Transition } from "@headlessui/react";
 import { doc, DocumentData, updateDoc } from "firebase/firestore";
-import { Fragment, SVGProps, useEffect, useRef, useState } from "react";
+import { Fragment, SVGProps } from "react";
 import db from "../../../firebase/initFirebase";
+import { TaskData } from "../../../model/TaskData";
 
 interface DropdownTypeProps {
-  task: DocumentData;
+  task: TaskData;
 }
 
 const arrayTypes: string[] = ["Nova", "Erro", "Curso"];

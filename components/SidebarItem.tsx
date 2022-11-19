@@ -1,7 +1,4 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { ParsedUrlQueryInput } from "querystring";
-import { useEffect, useState } from "react";
 
 interface MenuItemProps {
   texto: string;

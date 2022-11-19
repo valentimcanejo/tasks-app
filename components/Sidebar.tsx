@@ -1,25 +1,17 @@
 "use client";
-import { useContext, useEffect, useRef, useState } from "react";
-
-import {
-  GruposIcon,
-  LogoutIcon,
-  PedidosIcon,
-  ProjetosIcon,
-  UsuarioIcon,
-} from "./icons";
+import { useEffect, useRef, useState } from "react";
+import { ProjetosIcon, UsuarioIcon } from "./icons";
 import { HomeIcon } from "./icons";
 import { LeftArrow } from "./icons";
 import SidebarItem from "./SidebarItem";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import useWindowSize from "../hooks/useWindowSize";
 
-interface ConteudoPros {
+interface ConteudoProps {
   children?: any;
 }
 
-export default function Sidebar({ children }: ConteudoPros) {
+export default function Sidebar({ children }: ConteudoProps) {
   const [open, setOpen] = useState<boolean>(
     typeof window !== "undefined" && localStorage.getItem("sidebar") === "true"
       ? true
