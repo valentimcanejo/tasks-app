@@ -1,28 +1,20 @@
 import { Menu, Transition } from "@headlessui/react";
 import { doc, DocumentData, updateDoc } from "firebase/firestore";
 import { Fragment, SVGProps, useEffect, useRef, useState } from "react";
-import db from "../firebase/initFirebase";
+import db from "../../../firebase/initFirebase";
 
-interface DropdownDevsProps {
+interface DropdownStatusProps {
   task: DocumentData;
 }
 
-const arrayDevs: string[] = [
-  "Rômulo",
-  "Eric",
-  "Gabriel Óliver",
-  "Gabriel Silva",
-  "Jardel",
-  "Edjan",
-  "Pedro",
-];
+const arrayStatus: string[] = ["A Fazer", "Fazendo", "Em Teste", "Concluído"];
 
-export default function DropdownDevs({ task }: DropdownDevsProps) {
-  const updateTaskDev = async (newDev: string) => {
+export default function DropdownStatus({ task }: DropdownStatusProps) {
+  const updateTaskStatus = async (newStatus: string) => {
     const taskCollectionRef = doc(db, "tasks", task.id);
 
     await updateDoc(taskCollectionRef, {
-      dev: newDev,
+      status: newStatus,
     });
   };
 
@@ -30,9 +22,19 @@ export default function DropdownDevs({ task }: DropdownDevsProps) {
     <div>
       <Menu as="div" className="inline-block text-left ">
         <Menu.Button
-          className={`border-none text-center cursor-pointer bg-base-100 text-base-content`}
+          className={`border-none text-center cursor-pointer text-white ${
+            task?.status === "A Fazer"
+              ? "bg-red-400"
+              : task?.status === "Concluído"
+              ? "bg-blue-400"
+              : task?.status === "Em Teste"
+              ? "bg-green-400"
+              : task?.status === "Fazendo"
+              ? "bg-orange-400"
+              : null
+          }`}
         >
-          {task?.dev}
+          {task?.status}
         </Menu.Button>
 
         <Transition
@@ -44,21 +46,21 @@ export default function DropdownDevs({ task }: DropdownDevsProps) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute border-none bg-white  mt-2 w-56  divide-y rounded-lg shadow-lg ring-1 ring-opacity-5 focus:outline-none">
+          <Menu.Items className="absolute border-none bg-white right-0 mt-2 w-56 origin-top-right divide-y rounded-lg shadow-lg ring-1 ring-opacity-5 focus:outline-none">
             <div className="px-1 py-1 border-none bg-base-100 rounded-lg ">
-              {arrayDevs.map((dev: string) => (
-                <div key={dev}>
+              {arrayStatus.map((status: string) => (
+                <div key={status}>
                   <Menu.Item>
                     {({ active }) => (
                       <button
-                        onClick={() => updateTaskDev(dev)}
+                        onClick={() => updateTaskStatus(status)}
                         className={`${
                           active
                             ? "bg-primary text-white"
                             : "text-base-content bg-base-100"
                         } group flex border-none w-full items-center rounded-md px-2 py-2 text-sm`}
                       >
-                        {dev}
+                        {status}
                       </button>
                     )}
                   </Menu.Item>

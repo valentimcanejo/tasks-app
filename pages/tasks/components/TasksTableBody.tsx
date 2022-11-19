@@ -1,6 +1,6 @@
 import { deleteDoc, doc, DocumentData } from "firebase/firestore";
 import { useState } from "react";
-import db from "../firebase/initFirebase";
+import db from "../../../firebase/initFirebase";
 
 import DropdownDevs from "./DropdownDevs";
 import DropdownStatus from "./DropdownStatus";

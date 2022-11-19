@@ -1,20 +1,20 @@
 import { Menu, Transition } from "@headlessui/react";
 import { doc, DocumentData, updateDoc } from "firebase/firestore";
 import { Fragment, SVGProps, useEffect, useRef, useState } from "react";
-import db from "../firebase/initFirebase";
+import db from "../../../firebase/initFirebase";
 
-interface DropdownStatusProps {
+interface DropdownTypeProps {
   task: DocumentData;
 }
 
-const arrayStatus: string[] = ["A Fazer", "Fazendo", "Em Teste", "Concluído"];
+const arrayTypes: string[] = ["Nova", "Erro", "Curso"];
 
-export default function DropdownStatus({ task }: DropdownStatusProps) {
-  const updateTaskStatus = async (newStatus: string) => {
+export default function DropdownType({ task }: DropdownTypeProps) {
+  const updateTaskType = async (newType: string) => {
     const taskCollectionRef = doc(db, "tasks", task.id);
 
     await updateDoc(taskCollectionRef, {
-      status: newStatus,
+      type: newType,
     });
   };
 
@@ -22,19 +22,17 @@ export default function DropdownStatus({ task }: DropdownStatusProps) {
     <div>
       <Menu as="div" className="inline-block text-left ">
         <Menu.Button
-          className={`border-none text-center cursor-pointer text-white ${
-            task?.status === "A Fazer"
-              ? "bg-red-400"
-              : task?.status === "Concluído"
-              ? "bg-blue-400"
-              : task?.status === "Em Teste"
-              ? "bg-green-400"
-              : task?.status === "Fazendo"
-              ? "bg-orange-400"
+          className={`border-none text-center cursor-pointer  ${
+            task?.type === "Erro"
+              ? "bg-red-400 text-white"
+              : task?.type === "Curso"
+              ? "bg-green-400 text-white"
+              : task?.type === "Nova"
+              ? "bg-base-100 text-base-content"
               : null
           }`}
         >
-          {task?.status}
+          {task?.type}
         </Menu.Button>
 
         <Transition
@@ -46,21 +44,21 @@ export default function DropdownStatus({ task }: DropdownStatusProps) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute border-none bg-white right-0 mt-2 w-56 origin-top-right divide-y rounded-lg shadow-lg ring-1 ring-opacity-5 focus:outline-none">
+          <Menu.Items className="absolute border-none bg-white  w-56 divide-y rounded-lg shadow-lg ring-1 ring-opacity-5 focus:outline-none">
             <div className="px-1 py-1 border-none bg-base-100 rounded-lg ">
-              {arrayStatus.map((status: string) => (
-                <div key={status}>
+              {arrayTypes.map((type: string) => (
+                <div key={type}>
                   <Menu.Item>
                     {({ active }) => (
                       <button
-                        onClick={() => updateTaskStatus(status)}
+                        onClick={() => updateTaskType(type)}
                         className={`${
                           active
                             ? "bg-primary text-white"
                             : "text-base-content bg-base-100"
                         } group flex border-none w-full items-center rounded-md px-2 py-2 text-sm`}
                       >
-                        {status}
+                        {type}
                       </button>
                     )}
                   </Menu.Item>

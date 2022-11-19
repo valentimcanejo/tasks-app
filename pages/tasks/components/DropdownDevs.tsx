@@ -1,20 +1,28 @@
 import { Menu, Transition } from "@headlessui/react";
 import { doc, DocumentData, updateDoc } from "firebase/firestore";
 import { Fragment, SVGProps, useEffect, useRef, useState } from "react";
-import db from "../firebase/initFirebase";
+import db from "../../../firebase/initFirebase";
 
-interface DropdownTypeProps {
+interface DropdownDevsProps {
   task: DocumentData;
 }
 
-const arrayTypes: string[] = ["Nova", "Erro", "Curso"];
+const arrayDevs: string[] = [
+  "Rômulo",
+  "Eric",
+  "Gabriel Óliver",
+  "Gabriel Silva",
+  "Jardel",
+  "Edjan",
+  "Pedro",
+];
 
-export default function DropdownType({ task }: DropdownTypeProps) {
-  const updateTaskType = async (newType: string) => {
+export default function DropdownDevs({ task }: DropdownDevsProps) {
+  const updateTaskDev = async (newDev: string) => {
     const taskCollectionRef = doc(db, "tasks", task.id);
 
     await updateDoc(taskCollectionRef, {
-      type: newType,
+      dev: newDev,
     });
   };
 
@@ -22,17 +30,9 @@ export default function DropdownType({ task }: DropdownTypeProps) {
     <div>
       <Menu as="div" className="inline-block text-left ">
         <Menu.Button
-          className={`border-none text-center cursor-pointer  ${
-            task?.type === "Erro"
-              ? "bg-red-400 text-white"
-              : task?.type === "Curso"
-              ? "bg-green-400 text-white"
-              : task?.type === "Nova"
-              ? "bg-base-100 text-base-content"
-              : null
-          }`}
+          className={`border-none text-center cursor-pointer bg-base-100 text-base-content`}
         >
-          {task?.type}
+          {task?.dev}
         </Menu.Button>
 
         <Transition
@@ -44,21 +44,21 @@ export default function DropdownType({ task }: DropdownTypeProps) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute border-none bg-white  w-56 divide-y rounded-lg shadow-lg ring-1 ring-opacity-5 focus:outline-none">
+          <Menu.Items className="absolute border-none bg-white  mt-2 w-56  divide-y rounded-lg shadow-lg ring-1 ring-opacity-5 focus:outline-none">
             <div className="px-1 py-1 border-none bg-base-100 rounded-lg ">
-              {arrayTypes.map((type: string) => (
-                <div key={type}>
+              {arrayDevs.map((dev: string) => (
+                <div key={dev}>
                   <Menu.Item>
                     {({ active }) => (
                       <button
-                        onClick={() => updateTaskType(type)}
+                        onClick={() => updateTaskDev(dev)}
                         className={`${
                           active
                             ? "bg-primary text-white"
                             : "text-base-content bg-base-100"
                         } group flex border-none w-full items-center rounded-md px-2 py-2 text-sm`}
                       >
-                        {type}
+                        {dev}
                       </button>
                     )}
                   </Menu.Item>

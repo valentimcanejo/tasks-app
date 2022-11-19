@@ -4,13 +4,14 @@ import { addDoc, collection, doc, DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { AddIcon } from "../../components/icons";
-import ModalCreateTask from "../../components/ModalCreateTask";
-import SprintsSelect from "../../components/SprintsSelect";
-import TaskTable from "../../components/TaskTable";
+
+import SprintsSelect from "./components/SprintsSelect";
+import TaskTable from "./components/TaskTable";
 import db from "../../firebase/initFirebase";
 import useWindowSize from "../../hooks/useWindowSize";
 import { getSprintByID, getSprints } from "../../service/sprints";
 import { getTasks } from "../../service/tasks";
+import Sidebar from "../../components/Sidebar";
 
 export default function Tasks() {
   const [openModalCreateTask, setOpenModalCreateTask] = useState(false);
@@ -102,9 +103,9 @@ export default function Tasks() {
   }, [tasksArray]);
 
   return (
-    <>
+    <Sidebar>
+      <Header titulo="Tarefas" />
       <div className="flex flex-col ">
-        <Header titulo="Tasks" />
         <div className="mx-4">
           <div className="flex justify-between mt-6">
             <SprintsSelect
@@ -133,10 +134,6 @@ export default function Tasks() {
           </div>
         </div>
       </div>
-      <ModalCreateTask
-        open={openModalCreateTask}
-        onClose={setOpenModalCreateTask}
-      />
-    </>
+    </Sidebar>
   );
 }

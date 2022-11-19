@@ -10,7 +10,7 @@ import {
 import { ref, uploadString } from "firebase/storage";
 import { useRouter } from "next/router";
 import { Fragment, useContext, useEffect, useState } from "react";
-import db from "../firebase/initFirebase";
+import db from "../../../firebase/initFirebase";
 import TypesSelect from "./TypesSelect";
 import UsersList from "./UsersList";
 
