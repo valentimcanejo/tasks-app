@@ -132,7 +132,7 @@ export default function Sidebar({ children }: ConteudoPros) {
             />
 
             <SidebarItem
-              texto="Desenvolvedores"
+              texto="Sprints"
               url="/tasks"
               icone={UsuarioIcon}
               open={open}

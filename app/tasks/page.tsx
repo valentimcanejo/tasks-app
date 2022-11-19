@@ -5,16 +5,19 @@ import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { AddIcon } from "../../components/icons";
 import ModalCreateTask from "../../components/ModalCreateTask";
+import SprintsSelect from "../../components/SprintsSelect";
 import TaskTable from "../../components/TaskTable";
 import db from "../../firebase/initFirebase";
 import useWindowSize from "../../hooks/useWindowSize";
+import { getSprints } from "../../service/sprints";
 import { getTasks } from "../../service/tasks";
 
 export default function Tasks() {
   const [openModalCreateTask, setOpenModalCreateTask] = useState(false);
   const [tasksArray, setTasksArray] = useState<DocumentData[]>();
   const [sortedTasksArray, setSortedTasksArray] = useState<DocumentData[]>();
-
+  const [selected, setSelected] = useState<any>();
+  const [arraySprints, setArraySprints] = useState<DocumentData[]>();
   const windowWidth = useWindowSize();
 
   const addTask = async () => {
@@ -35,6 +38,17 @@ export default function Tasks() {
     getTasks(setTasksArray);
   };
 
+  const getAllSprints = async () => {
+    try {
+      getSprints(setArraySprints);
+    } catch (error) {}
+  };
+  console.log(arraySprints);
+
+  useEffect(() => {
+    getAllSprints();
+  }, []);
+
   useEffect(() => {
     getAllTasks();
   }, []);
@@ -52,7 +66,12 @@ export default function Tasks() {
         <Header titulo="Tasks" />
         <div className="mx-4">
           <div className="flex justify-between mt-6">
-            <div className="text text-lg">Lista de Tarefas:</div>
+            <SprintsSelect
+              setSelected={setSelected}
+              selected={selected}
+              sprints={arraySprints}
+            />
+
             <div
               onClick={addTask}
               //onClick={() => setOpenModalCreateTask(true)}
