@@ -43,7 +43,7 @@ export default function TasksTableBody({ tasksArray }: TasksInterface) {
           <td className="w-1/6">
             <DropdownDevs task={task} />
           </td>
-          <td className="text-sm flex justify-between">
+          <td className="text-sm flex place-items-center justify-between">
             <div>{task?.description}</div>{" "}
             <div className="text-primary flex gap-4">
               <div
