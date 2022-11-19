@@ -1,6 +1,6 @@
 "use client";
 
-import { addDoc, collection, DocumentData } from "firebase/firestore";
+import { addDoc, collection, doc, DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { AddIcon } from "../../components/icons";
@@ -9,15 +9,20 @@ import SprintsSelect from "../../components/SprintsSelect";
 import TaskTable from "../../components/TaskTable";
 import db from "../../firebase/initFirebase";
 import useWindowSize from "../../hooks/useWindowSize";
-import { getSprints } from "../../service/sprints";
+import { getSprintByID, getSprints } from "../../service/sprints";
 import { getTasks } from "../../service/tasks";
 
 export default function Tasks() {
   const [openModalCreateTask, setOpenModalCreateTask] = useState(false);
   const [tasksArray, setTasksArray] = useState<DocumentData[]>();
   const [sortedTasksArray, setSortedTasksArray] = useState<DocumentData[]>();
-  const [selected, setSelected] = useState<any>();
+  const [selected, setSelected] = useState<any>(() => {
+    if (typeof window !== "undefined") {
+      localStorage.getItem("printAtual");
+    }
+  });
   const [arraySprints, setArraySprints] = useState<DocumentData[]>();
+  const [arraySprintTasks, setArraySprintTasks] = useState<any>();
   const windowWidth = useWindowSize();
 
   const addTask = async () => {
@@ -43,7 +48,43 @@ export default function Tasks() {
       getSprints(setArraySprints);
     } catch (error) {}
   };
-  console.log(arraySprints);
+
+  const getTasksByIds = async () => {
+    let array: any = [];
+
+    sortedTasksArray?.map(
+      (task) => selected?.tasks?.includes(task.id) && array.push(task)
+    );
+
+    const sprintTasksWithoutUndefined = array?.filter((element: any) => {
+      return element !== undefined;
+    });
+
+    setArraySprintTasks(sprintTasksWithoutUndefined);
+  };
+
+  const getSprint = async () => {
+    if (typeof window !== "undefined") {
+      const id = localStorage.getItem("printAtual");
+      if (id) {
+        getSprintByID(id, setSelected);
+      } else {
+        setSelected({ id: "", name: "" });
+      }
+    }
+  };
+
+  useEffect(() => {
+    getSprint();
+  }, []);
+
+  useEffect(() => {
+    getTasksByIds();
+  }, [sortedTasksArray, selected]);
+
+  // useEffect(() => {
+  //   localStorage.setItem("printAtual", selected.name);
+  // }, []);
 
   useEffect(() => {
     getAllSprints();
@@ -87,7 +128,7 @@ export default function Tasks() {
             } bg-base-100 shadow-xl`}
           >
             <div className="card-body p-0">
-              <TaskTable tasksArray={sortedTasksArray} />
+              <TaskTable tasksArray={arraySprintTasks} />
             </div>
           </div>
         </div>
