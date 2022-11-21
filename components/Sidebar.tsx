@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { ProjetosIcon, UsuarioIcon } from "./icons";
+import { ProjetosIcon, SprintIcon, UsuarioIcon } from "./icons";
 import { HomeIcon } from "./icons";
 import { LeftArrow } from "./icons";
 import SidebarItem from "./SidebarItem";
@@ -125,8 +125,8 @@ export default function Sidebar({ children }: ConteudoProps) {
 
             <SidebarItem
               texto="Sprints"
-              url="/tasks"
-              icone={UsuarioIcon}
+              url="/sprints"
+              icone={SprintIcon}
               open={open}
             />
           </ul>

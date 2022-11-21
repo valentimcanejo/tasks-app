@@ -21,7 +21,7 @@ export default function SprintsSelect({
   return (
     <div>
       <Listbox value={selected} onChange={setSelected}>
-        <div className=" mt-1 absolute z-50">
+        <div className=" mt-1  z-50">
           <Listbox.Button className="relative w-full cursor-default rounded-lg bg-base-200 border-none py-2 pl-3 pr-10 text-left shadow-md focus:outline-none sm:text-sm">
             <span className="block truncate">{selected?.name}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
