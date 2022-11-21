@@ -17,7 +17,7 @@ interface ModalProps {
 }
 
 export default function ModalRemoveSprint({
-  open,
+  open = false,
   onClose,
   selectedSprint,
 }: ModalProps) {
