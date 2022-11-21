@@ -1,7 +1,8 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { SprintData } from "../../../model/SprintData";
+import { Context as SprintContext } from "../../../context/SprintContext";
 
 interface TypesSelectProps {
   selected: SprintData;
@@ -14,6 +15,9 @@ export default function SprintsSelect({
   setSelected,
   sprints,
 }: TypesSelectProps) {
+  const { currentSprint, setCurrentSprint, setNewSprint } =
+    useContext(SprintContext);
+
   return (
     <div>
       <Listbox value={selected} onChange={setSelected}>
@@ -36,11 +40,7 @@ export default function SprintsSelect({
             <Listbox.Options className=" mt-1 max-h-60 px-4 box-border w-full overflow-auto rounded-md bg-base-300 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {sprints?.map((sprint: SprintData) => (
                 <Listbox.Option
-                  onClick={() => {
-                    if (typeof window !== "undefined") {
-                      localStorage.setItem("printAtual", sprint?.id);
-                    }
-                  }}
+                  onClick={() => setNewSprint?.(sprint.id)}
                   key={sprint.id}
                   className={({ active }) =>
                     `relative cursor-default select-none py-2 pl-10 pr-4 rounded-lg list-none  ${

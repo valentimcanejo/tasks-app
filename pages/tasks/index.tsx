@@ -2,11 +2,14 @@
 
 import {
   addDoc,
+  arrayUnion,
   collection,
   CollectionReference,
+  doc,
   DocumentData,
+  updateDoc,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { AddIcon } from "../../components/icons";
 
@@ -14,39 +17,45 @@ import SprintsSelect from "./components/SprintsSelect";
 import TaskTable from "./components/TaskTable";
 import db from "../../firebase/initFirebase";
 import useWindowSize from "../../hooks/useWindowSize";
-import { getSprintByID, getSprints } from "../../service/sprints";
+import { getSprintByID, getSprintID, getSprints } from "../../service/sprints";
 import { getTasks } from "../../service/tasks";
 import Sidebar from "../../components/Sidebar";
 import { TaskData } from "../../model/TaskData";
 import { SprintData } from "../../model/SprintData";
+import { Context as SprintContext } from "../../context/SprintContext";
 
 export default function Tasks() {
+  const { currentSprint } = useContext(SprintContext);
   const [tasksArray, setTasksArray] = useState<TaskData[]>();
   const [sortedTasksArray, setSortedTasksArray] = useState<TaskData[]>();
-  const [selected, setSelected] = useState<any>(() => {
-    if (typeof window !== "undefined") {
-      localStorage.getItem("printAtual");
-    }
-  });
+  const [selected, setSelected] = useState<any>(currentSprint);
   const [arraySprints, setArraySprints] = useState<SprintData[]>();
   const [arraySprintTasks, setArraySprintTasks] = useState<TaskData[]>();
   const windowWidth = useWindowSize();
+  console.log(currentSprint);
 
   const addTask = async () => {
-    const collectionRef: CollectionReference<DocumentData> = collection(
-      db,
-      "tasks"
-    );
+    if (currentSprint) {
+      const tasksRef: CollectionReference<DocumentData> = collection(
+        db,
+        "tasks"
+      );
+      const sprintRef = doc(db, "sprints", currentSprint);
 
-    const data = {
-      date: new Date(),
-      description: "",
-      dev: "Selecionar",
-      status: "A Fazer",
-      type: "Nova",
-    };
+      const data = {
+        date: new Date(),
+        description: "",
+        dev: "Selecionar",
+        status: "A Fazer",
+        type: "Nova",
+      };
 
-    await addDoc(collectionRef, data);
+      const taskRef = await addDoc(tasksRef, data);
+
+      await updateDoc(sprintRef, {
+        tasks: arrayUnion(taskRef?.id),
+      });
+    }
   };
 
   const getAllTasks = async () => {
@@ -74,19 +83,16 @@ export default function Tasks() {
   };
 
   const getSprint = async () => {
-    if (typeof window !== "undefined") {
-      const id: string | null = localStorage.getItem("printAtual");
-      if (id) {
-        getSprintByID(id, setSelected);
-      } else {
-        setSelected({ id: "", name: "" });
-      }
+    if (currentSprint) {
+      getSprintByID(currentSprint, setSelected);
+    } else {
+      setSelected({ id: "", name: "" });
     }
   };
 
   useEffect(() => {
     getSprint();
-  }, []);
+  }, [currentSprint]);
 
   useEffect(() => {
     getTasksByIds();

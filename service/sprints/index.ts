@@ -3,6 +3,7 @@ import {
   collection,
   onSnapshot,
   CollectionReference,
+  getDocs,
 } from "firebase/firestore";
 import db from "../../firebase/initFirebase";
 import { SprintData } from "../../model/SprintData";
@@ -26,7 +27,7 @@ export const getSprints = (setData: (value: SprintData[]) => void) => {
 };
 
 export const getSprintByID = (
-  id: string,
+  id: string | undefined,
   setData: (value: SprintData | undefined) => void
 ) => {
   const sprintsCollectionRef: CollectionReference<DocumentData> = collection(
@@ -43,4 +44,19 @@ export const getSprintByID = (
 
     setData(find);
   });
+};
+
+export const getSprintID = async (id: string | undefined) => {
+  const collectionRef = collection(db, "sprints");
+
+  const snapshots = await getDocs(collectionRef);
+
+  const docs = snapshots.docs.map((doc) => {
+    const data = doc.data();
+    data.id = doc.id;
+
+    return data;
+  });
+
+  return docs.find((sprint) => sprint.id === id);
 };
