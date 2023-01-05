@@ -32,7 +32,6 @@ export default function Tasks() {
   const [arraySprints, setArraySprints] = useState<SprintData[]>();
   const [arraySprintTasks, setArraySprintTasks] = useState<TaskData[]>();
   const windowWidth = useWindowSize();
-  console.log(currentSprint);
 
   const addTask = async () => {
     if (currentSprint) {
@@ -42,7 +41,7 @@ export default function Tasks() {
       );
       const sprintRef = doc(db, "sprints", currentSprint);
 
-      const data = {
+      const data: TaskData = {
         date: new Date(),
         description: "",
         dev: "Selecionar",

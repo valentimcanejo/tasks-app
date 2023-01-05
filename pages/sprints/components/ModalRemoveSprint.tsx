@@ -1,10 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  deleteDoc,
-  doc,
-  DocumentData,
-  DocumentReference,
-} from "firebase/firestore";
+import { deleteDoc, doc, DocumentData, DocumentReference } from "firebase/firestore";
 import { Fragment, MouseEventHandler } from "react";
 import db from "../../../firebase/initFirebase";
 import { SprintData } from "../../../model/SprintData";
@@ -21,7 +16,7 @@ export default function ModalRemoveSprint({
   onClose,
   selectedSprint,
 }: ModalProps) {
-  const deleteSprint = async (sprint: DocumentData | undefined) => {
+  const deleteSprint = async (sprint: DocumentData | undefined): Promise<void> => {
     if (sprint) {
       const collectionRef: DocumentReference<DocumentData> = doc(
         db,

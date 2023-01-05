@@ -21,7 +21,7 @@ export default function ModalEditDescription({
 
   const putTask = async (e: any) => {
     e.preventDefault();
-    if (task) {
+    if (task && task.id) {
       const collectionRef = doc(db, "tasks", task.id);
 
       await updateDoc(collectionRef, {

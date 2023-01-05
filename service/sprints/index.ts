@@ -8,7 +8,9 @@ import {
 import db from "../../firebase/initFirebase";
 import { SprintData } from "../../model/SprintData";
 
-export const getSprints = (setData: (value: SprintData[]) => void) => {
+type SprintDataWithoutID = Omit<SprintData, "id">;
+
+export const getSprints = (setData: (value: SprintData[]) => void): void => {
   const sprintsCollectionRef: CollectionReference<DocumentData> = collection(
     db,
     "sprints"
@@ -17,7 +19,7 @@ export const getSprints = (setData: (value: SprintData[]) => void) => {
   onSnapshot(sprintsCollectionRef, (snapshot) => {
     setData(
       snapshot.docs.map((doc) => ({
-        ...(doc.data() as SprintData),
+        ...(doc.data() as SprintDataWithoutID),
         id: doc.id,
       }))
     );
@@ -44,6 +46,8 @@ export const getSprintByID = (
 
     setData(find);
   });
+
+  return;
 };
 
 export const getSprintID = async (id: string | undefined) => {

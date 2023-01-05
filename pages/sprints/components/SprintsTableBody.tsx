@@ -15,16 +15,28 @@ interface SprintsTableProps {
 }
 
 export default function SprintsTableBody({ sprintsArray }: SprintsTableProps) {
-  const [openModalRemoveSprint, setOpenModalRemoveSprint] = useState(false);
+  const [openModalRemoveSprint, setOpenModalRemoveSprint] =
+    useState<boolean>(false);
   const [selectedSprint, setSelectedSprint] =
-    useState<DocumentData | undefined>();
+    useState<SprintData | undefined>();
 
   const formatarData = (data: Timestamp) => {
-    if (data) {
-      let newDate = data.toDate().toLocaleString("pt-BR");
+    if (
+      typeof data.seconds === "number" &&
+      typeof data.nanoseconds === "number"
+    ) {
+      if (data) {
+        let newDate = data.toDate().toLocaleString("pt-BR");
 
-      return newDate.split(" ")[0];
+        return newDate.split(" ")[0];
+      }
     }
+
+    throw new Error(
+      `Erro - Não foi possível formatar a data do tipo ${typeof data}`
+    );
+
+    //type FunctionType = ReturnType<typeof formatarData>;
   };
 
   return (

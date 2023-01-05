@@ -1,10 +1,8 @@
-import { Timestamp } from "firebase/firestore";
-
 export interface TaskData {
-  id: string;
+  id?: string;
   description: string;
   dev: string;
-  status: string;
-  type: string;
-  date: Timestamp;
+  status: "A Fazer" | "Fazendo" | "Concluído" | "Em Teste";
+  type: "Curso" | "Erro" | "Nova";
+  date: Date;
 }

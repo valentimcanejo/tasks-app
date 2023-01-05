@@ -12,11 +12,13 @@ const arrayTypes: string[] = ["Nova", "Erro", "Curso"];
 
 export default function DropdownType({ task }: DropdownTypeProps) {
   const updateTaskType = async (newType: string) => {
-    const taskCollectionRef = doc(db, "tasks", task.id);
+    if (task.id) {
+      const taskCollectionRef = doc(db, "tasks", task.id);
 
-    await updateDoc(taskCollectionRef, {
-      type: newType,
-    });
+      await updateDoc(taskCollectionRef, {
+        type: newType,
+      });
+    }
   };
 
   return (

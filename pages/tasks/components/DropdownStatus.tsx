@@ -12,11 +12,13 @@ const arrayStatus: string[] = ["A Fazer", "Fazendo", "Em Teste", "Concluído"];
 
 export default function DropdownStatus({ task }: DropdownStatusProps) {
   const updateTaskStatus = async (newStatus: string) => {
-    const taskCollectionRef = doc(db, "tasks", task.id);
+    if (task.id) {
+      const taskCollectionRef = doc(db, "tasks", task.id);
 
-    await updateDoc(taskCollectionRef, {
-      status: newStatus,
-    });
+      await updateDoc(taskCollectionRef, {
+        status: newStatus,
+      });
+    }
   };
 
   return (

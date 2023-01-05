@@ -6,7 +6,7 @@ interface HeaderProps {
   titulo: string;
 }
 
-export default function Header({ titulo }: HeaderProps) {
+export default function Header({ titulo = "Título" }: HeaderProps) {
   useEffect(() => {
     themeChange(false);
   }, []);

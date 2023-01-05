@@ -25,15 +25,13 @@ const arrayDevs: string[] = [
 
 export default function DropdownDevs({ task }: DropdownDevsProps) {
   const updateTaskDev = async (newDev: string) => {
-    const taskCollectionRef: DocumentReference<DocumentData> = doc(
-      db,
-      "tasks",
-      task.id
-    );
+    if (task.id) {
+      const taskCollectionRef = doc(db, "tasks", task.id);
 
-    await updateDoc(taskCollectionRef, {
-      dev: newDev,
-    });
+      await updateDoc(taskCollectionRef, {
+        dev: newDev,
+      });
+    }
   };
 
   return (
